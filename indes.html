@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>isales Module - Consulter Anleitungsheft</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #00a651;
+            --dark-green: #008542;
+            --light-green: #e8f5e9;
+            --accent-orange: #ff6b35;
+            --text-dark: #2c3e50;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+            color: var(--white);
+            padding: 2rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .spg-logo {
+            height: 50px;
+            filter: brightness(0) invert(1);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.25rem;
+        }
+
+        /* Navigation */
+        .nav-toggle {
+            display: none;
+            background: var(--white);
+            color: var(--primary-green);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .main-nav {
+            background: var(--white);
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+            z-index: 900;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--light-green);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--primary-green);
+        }
+
+        .nav-item:hover {
+            background: var(--primary-green);
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .nav-item::before {
+            content: "▸";
+            color: var(--primary-green);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .nav-item:hover::before {
+            color: var(--white);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Module Cards */
+        .module {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            scroll-margin-top: 120px;
+        }
+
+        .module:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--primary-green);
+        }
+
+        .module-icon {
+            font-size: 2.5rem;
+            color: var(--primary-green);
+        }
+
+        .module h2 {
+            color: var(--primary-green);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .module-subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin: 0.5rem 0 1.5rem 0;
+            font-style: italic;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--dark-green);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .module-content {
+            color: var(--text-dark);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .module-content p {
+            margin-bottom: 1rem;
+        }
+
+        /* Questions */
+        .questions {
+            background: var(--light-green);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .questions ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .questions li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .questions li::before {
+            content: "?";
+            position: absolute;
+            left: 0;
+            color: var(--primary-green);
+            font-weight: bold;
+            font-size: 1.2rem;
+            background: var(--white);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        /* Links */
+        .module-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-green);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .link-btn:hover {
+            background: var(--dark-green);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .link-btn.video {
+            background: var(--accent-orange);
+        }
+
+        .link-btn.video:hover {
+            background: #e55a2b;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .footer p {
+            opacity: 0.8;
+        }
+
+        .footer a {
+            color: var(--primary-green);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo-section {
+                flex-direction: column;
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .main-nav {
+                display: none;
+                top: auto;
+                position: relative;
+            }
+
+            .main-nav.active {
+                display: block;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .module {
+                padding: 1.5rem;
+            }
+
+            .module h2 {
+                font-size: 1.5rem;
+            }
+
+            .module-links {
+                flex-direction: column;
+            }
+
+            .link-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary-green);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-hover);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            background: var(--dark-green);
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="https://www.isales.de/wp-content/uploads/cropped-SPG.png" alt="SPG Logo" class="spg-logo">
+                <div>
+                    <h1>isales Module - Consulter Anleitungsheft</h1>
+                    <p>Strukturierter Leitfaden für die Kundenberatung</p>
+                </div>
+            </div>
+            <button class="nav-toggle" onclick="toggleNav()">📋 Inhaltsverzeichnis</button>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="main-nav" id="mainNav">
+        <div class="nav-content">
+            <div class="nav-grid">
+                <a href="#preishistorie" class="nav-item">Preishistorie</a>
+                <a href="#positionsvorschlag" class="nav-item">Positionsvorschlag</a>
+                <a href="#konsilager" class="nav-item">Konsilager</a>
+                <a href="#palettenkonto" class="nav-item">Palettenkonto</a>
+                <a href="#etikettenmodul" class="nav-item">Etikettenmodul</a>
+                <a href="#banf" class="nav-item">BAnf</a>
+                <a href="#eingangsrechnungspruefung" class="nav-item">Eingangsrechnungsprüfung</a>
+                <a href="#benachrichtigungsdienst" class="nav-item">Benachrichtigungsdienst</a>
+                <a href="#intercompany" class="nav-item">Intercompany Dienst</a>
+                <a href="#querytool" class="nav-item">Query Tool DX</a>
+                <a href="#easyconfigurator" class="nav-item">EasyConfigurator</a>
+                <a href="#importer" class="nav-item">Importer</a>
+                <a href="#mail2xrm" class="nav-item">Mail-2-xRM</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Modul 1: Preishistorie -->
+        <article class="module" id="preishistorie">
+            <div class="module-header">
+                <span class="module-icon">📊</span>
+                <h2>isales Preishistorie</h2>
+            </div>
+            <p class="module-subtitle">Analyse der Verkaufshistorie mit automatischen Artikelvorschlägen</p>
+            
+            <div class="module-content">
+                <p>Dieses Modul analysiert die Verkaufshistorie eines Kunden und schlägt automatisch die am häufigsten oder zuletzt gekauften Artikel vor. Bei der Erstellung neuer Verkaufsbelege werden basierend auf früheren Bestellungen des Kunden relevante Positionen vorgeschlagen und können mit wenigen Klicks übernommen werden.</p>
+                
+                <p>Das System berücksichtigt dabei Kaufhäufigkeit, Saisonalität und kundenspezifische Präferenzen. Die Funktion beschleunigt die Belegerfassung erheblich, reduziert Eingabefehler und verbessert die Kundenzufriedenheit durch personalisierte Vorschläge.</p>
+                
+                <p>Besonders vorteilhaft für Unternehmen mit wiederkehrenden Kunden und Standardbestellungen, da es den Vertriebsprozess optimiert und die Bearbeitungszeit für Aufträge deutlich verkürzt.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Haben Sie viele Kunden, die regelmäßig ähnliche oder die gleichen Artikel bestellen?</li>
+                    <li>Wie erfassen Sie denn neue Aufträge - müssen Sie da jedes Mal alle Positionen neu eingeben?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.isales.de/wp-content/uploads/Moduldatenblatt-Positionsvorschlag-und-Positionserfassung-Historie.pdf" class="link-btn" target="_blank">
+                    📄 Datenblatt
+                </a>
+                <a href="https://www.youtube.com/watch?v=dQQCQYi1QS4" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+
+        <!-- Modul 2: Positionsvorschlag -->
+        <article class="module" id="positionsvorschlag">
+            <div class="module-header">
+                <span class="module-icon">🎯</span>
+                <h2>isales Positionsvorschlag</h2>
+            </div>
+            <p class="module-subtitle">Anzeige und selektive Übernahme von Positionen die ein Kunde üblicherweise erwirbt</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Das Positionsvorschlag-Modul erweitert die Funktionalität der Historienübernahme durch intelligente Vorschläge basierend auf Kundenverhalten und Kaufmustern. Es analysiert nicht nur die direkte Kaufhistorie, sondern auch verwandte Artikel, Ergänzungsprodukte und saisonale Trends.</p>
+                
+                <p>Bei der Belegerfassung werden automatisch relevante Artikel vorgeschlagen, die der Kunde typischerweise zusammen bestellt oder die zu seinem Geschäftsbereich passen. Die Vorschläge können selektiv übernommen oder angepasst werden. Das System lernt kontinuierlich aus den Kaufentscheidungen und verbessert seine Vorschläge.</p>
+                
+                <p><strong>Ergebnis:</strong> Erhöhte Verkaufschancen durch Cross-Selling und Up-Selling, verkürzte Bestellzeiten und verbesserte Beratungsqualität durch datengestützte Empfehlungen.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Gibt es Kunden, die immer wieder die gleichen Artikel bei Ihnen bestellen?</li>
+                    <li>Bieten Sie bestimmte Artikel in Aktionen für alle Kunde an?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.isales.de/wp-content/uploads/Moduldatenblatt-Positionsvorschlag-und-Positionserfassung-Historie.pdf" class="link-btn" target="_blank">
+                    📄 Datenblatt
+                </a>
+                <a href="https://www.youtube.com/watch?v=dQQCQYi1QS4" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+
+        <!-- Modul 3: Konsilager -->
+        <article class="module" id="konsilager">
+            <div class="module-header">
+                <span class="module-icon">🏭</span>
+                <h2>isales Konsilager</h2>
+            </div>
+            <p class="module-subtitle">Verwaltung von Lagern bei Kunden</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Das Konsilager-Modul ermöglicht die effiziente Verwaltung von Konsignationslagern direkt beim Kunden. Waren bleiben im Eigentum des Lieferanten, bis sie vom Kunden verbraucht oder abgerufen werden.</p>
+                
+                <p>Das System überwacht kontinuierlich die Lagerbestände beim Kunden, generiert automatische Auffüllungsvorschläge und dokumentiert alle Entnahmen. Konsignationsverträge können mit individuellen Konditionen hinterlegt werden. Das Modul unterscheidet zwischen verschiedenen Abrechnungsmodellen (zeitbasiert, verbrauchsbasiert) und erstellt automatisch entsprechende Belege.</p>
+                
+                <p><strong>Kundennutzen:</strong> Reduzierte Lagerkosten und garantierte Verfügbarkeit</p>
+                <p><strong>Lieferantennutzen:</strong> Stärkere Kundenbindung und bessere Planungssicherheit durch kontinuierliche Nachfrage</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Haben Sie Waren oder Ersatzteile direkt bei Kunden vor Ort gelagert?</li>
+                    <li>Wie behalten Sie den Überblick, welche Artikel der Kunde aus dem Lager entnimmt?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.isales.de/wp-content/uploads/Moduldatenblatt-Konsignationslager.pdf" class="link-btn" target="_blank">
+                    📄 Datenblatt
+                </a>
+                <a href="https://www.youtube.com/watch?v=kTk1zRTYJcs" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+
+        <!-- Modul 4: Palettenkonto -->
+        <article class="module" id="palettenkonto">
+            <div class="module-header">
+                <span class="module-icon">📦</span>
+                <h2>isales Palettenkonto</h2>
+            </div>
+            <p class="module-subtitle">Verwaltung und Abrechnung von Packmittelbeständen mit automatischer Kontenverfolgung</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Das Palettenkonto-Modul ermöglicht die professionelle Verwaltung und Abrechnung von Packmitteln wie Europaletten, Gitterboxen, Rollbehältern und anderen Ladungsträgern. Das System führt automatisch Soll-Ist-Vergleiche durch und dokumentiert alle Bewegungen von Packmitteln zwischen Unternehmen und Kunden.</p>
+                
+                <p>Für jedes Packmittel werden separate Konten geführt, die Eingänge, Ausgänge und aktuelle Bestände präzise nachverfolgen. Das Modul erstellt automatisch Palettenkontoauszüge, die an Geschäftspartner versendet werden können, und ermöglicht die Abrechnung von Packmitteln nach verschiedenen Modellen (Tausch, Miete, Verkauf).</p>
+                
+                <p><strong>Mehrwert:</strong> Reduzierter manueller Aufwand, verbesserte Transparenz bei Packmittelbewegungen und Verhinderung von Verlusten durch lückenlose Dokumentation aller Packmitteltransaktionen.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Arbeiten Sie mit Europaletten, Gitterboxen oder anderen Ladungsträgern?</li>
+                    <li>Wie behalten Sie den Überblick über Ihre Packmittelbestände bei Kunden?</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Modul 5: Etikettenmodul -->
+        <article class="module" id="etikettenmodul">
+            <div class="module-header">
+                <span class="module-icon">🏷️</span>
+                <h2>isales Etikettenmodul</h2>
+            </div>
+            <p class="module-subtitle">Frei definierbare prozessbasierte Druckbelege, z.B. für Etiketten</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Das Etikettenmodul bietet eine flexible und automatisierte Lösung für die Erstellung maßgeschneiderter Etiketten und Druckbelege. Anwender können eigene Layouts und Designs erstellen, die sich nahtlos in verschiedene Geschäftsprozesse integrieren lassen.</p>
+                
+                <p>Das System unterstützt Barcodes, QR-Codes, variable Datenfelder und dynamische Inhalte aus der Sage-Datenbank. Druckprozesse können von Benutzern selbst definiert und automatisiert werden. Das Modul ermöglicht den gleichzeitigen Druck mehrerer Formulare in einem Prozess und bietet Vorlagen für verschiedene Etikettenformate (Versand, Lager, Produktion, Qualitätskontrolle).</p>
+                
+                <p><strong>Ergebnis:</strong> Erhöhte Genauigkeit, reduzierter Zeitaufwand und verbesserte Rückverfolgbarkeit in Logistik- und Produktionsprozessen durch direkte Integration aus Sage-Belegen heraus.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Drucken Sie oft Etiketten für Versand, Lager oder Produktion?</li>
+                    <li>Müssen Sie die Daten für Etiketten normalerweise manuell eingeben?</li>
+                    <li>Bräuchten Sie manchmal spezielle Etiketten-Layouts mit Barcodes oder QR-Codes?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.isales.de/wp-content/uploads/Moduldatenblatt-Etikettendruck.pdf" class="link-btn" target="_blank">
+                    📄 Datenblatt
+                </a>
+                <a href="https://www.youtube.com/watch?v=FnZbgqs460s" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+
+        <!-- Modul 6: BAnf -->
+        <article class="module" id="banf">
+            <div class="module-header">
+                <span class="module-icon">📝</span>
+                <h2>isales BAnf (Bedarfsanforderung)</h2>
+            </div>
+            <p class="module-subtitle">Digitale Bedarfsanforderung der Mitarbeiter mit Freigabeprozess und automatischer Bestellerstellung</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Das BAnf-Modul (Bestellanforderung/Bedarfsanforderung) digitalisiert und optimiert den kompletten unternehmensinternen Beschaffungsprozess. Mitarbeiter können über eine webbasierte Oberfläche oder mobile App Bedarfsanforderungen erstellen, ohne eine Sage-Lizenz zu benötigen.</p>
+                
+                <p>Das System bietet einen konfigurierbaren mehrstufigen Freigabeprozess mit automatischen E-Mail-Benachrichtigungen und Budgetprüfungen. Nach der Freigabe werden Bedarfsanforderungen automatisch in Bestellungen umgewandelt und an den Einkauf weitergeleitet.</p>
+                
+                <p><strong>Integration:</strong> Nahtlose Integration in bestehende Sage 100 Workflows und Kombination mit der Sage Rechnungsprüfung für einen durchgängigen Prozess von der Anforderung bis zur Rechnungsfreigabe.</p>
+                
+                <p><strong>Mehrwert:</strong> Reduzierte Medienbrüche, Eliminierung von Excel-Listen und Papierformularen, erheblich beschleunigter Beschaffungsprozess.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Wie läuft bei Ihnen die Bestellung von Material oder Betriebsmitteln ab?</li>
+                    <li>Arbeiten Sie noch mit Papierlisten, Excel-Tabellen oder Zuruf an den Einkauf?</li>
+                    <li>Wie lange dauert es normalerweise von der Anforderung bis zur tatsächlichen Bestellung?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.isales.de/wp-content/uploads/Moduldatenblatt-BAnf.pdf" class="link-btn" target="_blank">
+                    📄 Datenblatt
+                </a>
+                <a href="https://www.youtube.com/watch?v=_U5NJtkJ0e8" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+
+        <!-- Modul 7: Eingangsrechnungsprüfung -->
+        <article class="module" id="eingangsrechnungspruefung">
+            <div class="module-header">
+                <span class="module-icon">✅</span>
+                <h2>isales Eingangsrechnungsprüfung</h2>
+            </div>
+            <p class="module-subtitle">Prüfung und Freigabeprozess der Eingangsrechnungen (DMS erforderlich)</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Das Eingangsrechnungsprüfungsmodul digitalisiert und automatisiert den gesamten Prozess der Rechnungsprüfung und -freigabe. Es integriert sich nahtlos in Sage DMS oder dvelop d3 Dokumentenmanagementsysteme.</p>
+                
+                <p>Eingehende Rechnungen werden automatisch erfasst, OCR-gescannt und die Daten extrahiert. Das System führt automatische Plausibilitätsprüfungen durch (Preise, Bestellungen, Lieferungen) und leitet Rechnungen entsprechend vorkonfigurierter Workflows zur Prüfung und Freigabe weiter.</p>
+                
+                <p>Prüfer erhalten automatische Benachrichtigungen und können Rechnungen digital freigeben oder ablehnen. Das Modul bietet vollständige Nachverfolgbarkeit aller Prüfschritte, automatische Erinnerungen bei Verzögerungen und Integration in die Buchhaltung.</p>
+                
+                <p><strong>Ergebnis:</strong> Erhebliche Zeitersparnisse, reduzierte Fehler und verbesserte Compliance durch lückenlose Dokumentation des Freigabeprozesses.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Wie läuft denn bei Ihnen die Prüfung und Freigabe von Eingangsrechnungen ab?</li>
+                    <li>Müssen Rechnungen bei Ihnen durch verschiedene Personen gehen, bevor sie bezahlt werden?</li>
+                    <li>Haben Sie manchmal das Problem, dass Rechnungen zu lange liegen bleiben?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.isales.de/wp-content/uploads/Moduldatenblatt-Rechnungseingangspruefung.pdf" class="link-btn" target="_blank">
+                    📄 Datenblatt
+                </a>
+                <a href="https://www.youtube.com/watch?v=Bc-4ovU17mw&t=17s" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+
+        <!-- Modul 8: Benachrichtigungsdienst -->
+        <article class="module" id="benachrichtigungsdienst">
+            <div class="module-header">
+                <span class="module-icon">📧</span>
+                <h2>isales Benachrichtigungs- und Reportingdienst</h2>
+            </div>
+            <p class="module-subtitle">Sendet ereignis- oder zeitbezogene sowie kontextbezogene Mails oder Auswertungen</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Das Benachrichtigungs- und Reportingdienst-Modul automatisiert die Kommunikation und Berichterstattung in Sage 100 durch ereignis- und zeitgesteuerte Benachrichtigungen. Das System versendet automatisch E-Mails mit Auswertungen, Statusmeldungen und wichtigen Geschäftsinformationen an definierte Empfängergruppen.</p>
+                
+                <p>Dabei können sowohl interne Mitarbeiter als auch externe Partner wie Lieferanten und Kunden angesprochen werden. Der Dienst überwacht kontinuierlich verschiedene Geschäftsereignisse wie Lagerbestände, Zahlungseingänge, Liefertermine oder Qualitätskennzahlen und löst bei definierten Schwellenwerten oder Ereignissen automatische Benachrichtigungen aus.</p>
+                
+                <p>Berichte können in verschiedenen Formaten (PDF, Excel, CSV) generiert und als E-Mail-Anhang verschickt werden. Die Konfiguration erfolgt über benutzerfreundliche Assistenten, die auch komplexe Regelwerke ermöglichen.</p>
+                
+                <p><strong>Mehrwert:</strong> Verbesserte Reaktionszeiten bei kritischen Geschäftsereignissen und Sicherstellung, dass relevante Informationen rechtzeitig bei den richtigen Personen ankommen.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Müssen Sie regelmäßig Berichte oder Auswertungen manuell erstellen und versenden?</li>
+                    <li>Welche Informationen müssen Sie regelmäßig überwachen oder kontrollieren?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.isales.de/wp-content/uploads/Moduldatenblatt-Benachrichtigungsdienst.pdf" class="link-btn" target="_blank">
+                    📄 Datenblatt
+                </a>
+                <a href="https://www.youtube.com/watch?v=qjwJvTTkk7w" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+
+        <!-- Modul 9: Intercompany -->
+        <article class="module" id="intercompany">
+            <div class="module-header">
+                <span class="module-icon">🔄</span>
+                <h2>isales Intercompany Dienst</h2>
+            </div>
+            <p class="module-subtitle">Automatischer Belegtransfer zwischen verschiedenen Firmen/Mandanten</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Das Intercompany-Modul ermöglicht die prozessbasierte und vollautomatische Interaktion zwischen Unternehmen. Es überträgt Stammdaten zwischen Kunden und Lieferanten und erzeugt komplementäre Belegfolgen innerhalb und zwischen Mandanten automatisch.</p>
+                
+                <p>Der automatische Belegtransfer funktioniert sowohl zwischen verschiedenen Mandanten einer Datenbank als auch datenbankübergreifend. Das System unterstützt sowohl Verkaufs- als auch Einkaufsbelege und bietet sowohl manuellen Transfer mit einstellbarem Beleg-Workflow als auch automatischen Transfer über Stapelfunktionen für alle offenen Belege.</p>
+                
+                <p>Zu jedem übertragenen Beleg wird automatisch ein entsprechender Folgebeleg erstellt, wodurch die Verrechnung von Warenlieferungen zwischen verbundenen Unternehmen vollständig automatisiert wird.</p>
+                
+                <p><strong>Mehrwert:</strong> Erhebliche Reduzierung des manuellen Aufwands und Gewährleistung konsistenter Datenübertragung zwischen verschiedenen Unternehmensbereichen.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Ich sehe, Sie haben mehrere Mandanten. Wie machen Sie das denn aktuell mit der Verrechnung?</li>
+                    <li>Ist das sehr zeitaufwändig oder läuft das bei Ihnen ganz automatisch?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.isales.de/wp-content/uploads/Moduldatenblatt-Intercompany.pdf" class="link-btn" target="_blank">
+                    📄 Datenblatt
+                </a>
+                <a href="https://www.youtube.com/watch?v=ZLQ7CmbBOss" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+
+        <!-- Modul 10: Query Tool -->
+        <article class="module" id="querytool">
+            <div class="module-header">
+                <span class="module-icon">🔍</span>
+                <h2>desk app.box Query Tool DX</h2>
+            </div>
+            <p class="module-subtitle">Grafische Oberfläche zum Erstellen individueller Auswertungen aus Sage 100 Daten</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Das Query Tool DX bietet eine benutzerfreundliche grafische Oberfläche zur Erstellung individueller Auswertungen und Berichte direkt aus den Sage 100 Daten. Ohne SQL-Kenntnisse oder Programmiererfahrung können Anwender per Drag & Drop ihre eigenen Datenbankabfragen erstellen und als Reports speichern.</p>
+                
+                <p>Das Tool ermöglicht den Zugriff auf alle Tabellen und Felder der Sage 100 Datenbank und bietet Filter-, Sortier- und Gruppierungsfunktionen. Erstellte Auswertungen können in verschiedenen Formaten exportiert werden (Excel, CSV, PDF) und als Vorlagen für wiederkehrende Analysen gespeichert werden.</p>
+                
+                <p>Die Enterprise-Version erweitert die Funktionalität um die Möglichkeit, eigene Abfragen anzulegen und diese unternehmensweit zur Verfügung zu stellen. Power-User können so standardisierte Auswertungen für ihre Kollegen bereitstellen.</p>
+                
+                <p><strong>Mehrwert:</strong> Schnelle und flexible Datenanalyse ohne IT-Abhängigkeit, selbständige Beantwortung von Ad-hoc-Fragen und erhebliche Zeitersparnis bei wiederkehrenden Auswertungen.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Erstellen Sie häufig individuelle Auswertungen aus Ihren Sage-Daten?</li>
+                    <li>Wie analysieren Sie Ihre Daten, wenn die Standard-Auswertungen nicht ausreichen?</li>
+                    <li>Würden Sie gerne mehr mit Ihren Daten arbeiten, aber es fehlt die Zeit oder das Know-how?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.youtube.com/watch?v=sU64umRxhiI" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+
+        <!-- Modul 11: EasyConfigurator -->
+        <article class="module" id="easyconfigurator">
+            <div class="module-header">
+                <span class="module-icon">⚙️</span>
+                <h2>desk.EasyConfigurator</h2>
+            </div>
+            <p class="module-subtitle">Artikel- und Variantenkonfigurator für die Sage 100</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Der EasyConfigurator ermöglicht die intelligente Konfiguration und Verwaltung von Artikelvarianten direkt in Sage 100. Das Modul ist speziell für Unternehmen entwickelt, die Produkte mit vielen Varianten oder konfigurierbaren Optionen anbieten -- wie beispielsweise in verschiedenen Größen, Farben, Ausführungen oder mit unterschiedlichen Zusatzoptionen.</p>
+                
+                <p>Das System ermöglicht die Definition von Variantenmerkmalen und deren Kombinationen, generiert automatisch Artikelnummern nach definierbaren Regeln und erstellt alle notwendigen Artikelstammdaten. Der Konfigurator kann sowohl im Vertrieb als auch im E-Commerce eingesetzt werden und stellt sicher, dass nur gültige Kombinationen bestellt werden können.</p>
+                
+                <p>Preisregeln können auf Basis von Merkmalen definiert werden, sodass Aufpreise für bestimmte Optionen automatisch berechnet werden. Das Modul unterstützt auch die Verwaltung von Stücklisten für konfigurierbare Artikel.</p>
+                
+                <p><strong>Mehrwert:</strong> Drastische Reduzierung des Aufwands bei der Verwaltung von Produktvarianten, fehlerfreie Konfigurationen und erheblich vereinfachter Bestellprozess für komplexe Artikel.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Verkaufen Sie Artikel, die in verschiedenen Varianten angeboten werden?</li>
+                    <li>Wie verwalten Sie aktuell die vielen Artikelvarianten? Ist das aufwändig?</li>
+                    <li>Haben Ihre Kunden manchmal Schwierigkeiten, die richtige Variante zu bestellen?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.youtube.com/watch?v=rE4ufCsWFT4" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+
+        <!-- Modul 12: Importer -->
+        <article class="module" id="importer">
+            <div class="module-header">
+                <span class="module-icon">📥</span>
+                <h2>desk.Importer</h2>
+            </div>
+            <p class="module-subtitle">Professioneller Datenimport für Stammdaten und Belege</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Der desk.Importer ermöglicht den professionellen Import und die Aktualisierung von Stammdaten aus verschiedenen Datenquellen in Sage 100. Das Modul unterstützt die gängigsten Formate wie CSV, XLSX (Excel), XML und direkte SQL-Verbindungen zu Microsoft SQL Server-Datenbanken.</p>
+                
+                <p>Die Basic-Version fokussiert sich auf Stammdaten wie Artikel, Kunden, Lieferanten, Preise und Konditionen. Import-Mappings können gespeichert und für wiederkehrende Importe wiederverwendet werden. Das System bietet Validierungsfunktionen, Fehlerprotokolle und Vorschaumodus vor dem eigentlichen Import.</p>
+                
+                <p>Die Professional-Version erweitert die Funktionalität um den manuellen Import von initialen Belegen (Angebote, Aufträge, Lieferungen, Rechnungen). Dies ist besonders wertvoll bei Systemmigrationen oder der Übernahme von Altdaten. Auch historische Daten können so in Sage 100 überführt werden.</p>
+                
+                <p><strong>Mehrwert:</strong> Erhebliche Zeitersparnis bei Datenmigrationen und regelmäßigen Datenübernahmen, Vermeidung manueller Eingabefehler und vereinfachte Integration mit Drittsystemen.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Bekommen Sie regelmäßig Daten von Lieferanten oder aus anderen Systemen?</li>
+                    <li>Wie aufwändig ist es für Sie, zum Beispiel Artikeldaten oder Preise zu aktualisieren?</li>
+                    <li>Planen Sie eine Datenmigration oder müssen Sie Altdaten aus einem anderen System übernehmen?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.youtube.com/watch?v=9OOkFUh_6iY&t=5s" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+
+        <!-- Modul 13: Mail-2-xRM -->
+        <article class="module" id="mail2xrm">
+            <div class="module-header">
+                <span class="module-icon">✉️</span>
+                <h2>isales Mail-2-xRM</h2>
+            </div>
+            <p class="module-subtitle">Automatische Mail-Integration in sage100 xRM</p>
+            
+            <div class="module-content">
+                <h3 class="section-title">🎯 Funktionsdetails</h3>
+                <p>Das Mail-2-xRM Modul automatisiert die Integration von E-Mail-Kommunikation in das Sage 100 xRM Customer Relationship Management System. Eingehende und ausgehende E-Mails werden automatisch den entsprechenden Kunden, Projekten oder Vorgängen zugeordnet und in der CRM-Historie gespeichert.</p>
+                
+                <p>Das System erkennt Absender und Betreff automatisch und erstellt entsprechende Aktivitäten oder Aufgaben. E-Mail-Anhänge werden ebenfalls automatisch archiviert und verknüpft. Benutzer können direkt aus dem CRM heraus E-Mails versenden, die automatisch in der Kundenhistorie dokumentiert werden.</p>
+                
+                <p>Das Modul unterstützt verschiedene E-Mail-Provider und bietet Regeln für die automatische Kategorisierung und Weiterleitung.</p>
+                
+                <p><strong>Mehrwert:</strong> Lückenlose Dokumentation der Kundenkommunikation, verbesserter Kundenservice durch vollständige Gesprächshistorien und erhöhte Effizienz durch Eliminierung manueller Archivierungsaufgaben.</p>
+            </div>
+
+            <div class="questions">
+                <h3 class="section-title">💡 Qualifizierungsfragen für Service-Mitarbeiter</h3>
+                <ul>
+                    <li>Ich sehe, Sie nutzen auch das xRM-Modul. Archivieren Sie damit auch Ihre E-Mails?</li>
+                    <li>Wäre es hilfreich, wenn E-Mails automatisch im xRM abgelegt würden?</li>
+                </ul>
+            </div>
+
+            <div class="module-links">
+                <a href="https://www.isales.de/wp-content/uploads/Moduldatenblatt-Mail-2-xRM.pdf" class="link-btn" target="_blank">
+                    📄 Datenblatt
+                </a>
+                <a href="https://www.youtube.com/watch?v=NqrUIrQ6pBM" class="link-btn video" target="_blank">
+                    🎥 Video ansehen
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 isales GmbH - Ein Unternehmen der Software Partners Group</p>
+            <p><a href="https://www.isales.de" target="_blank">www.isales.de</a></p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top" id="backToTop">↑</a>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle Mobile Navigation
+        function toggleNav() {
+            const nav = document.getElementById('mainNav');
+            nav.classList.toggle('active');
+        }
+
+        // Back to Top Button
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Close mobile nav when clicking a link
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.getElementById('mainNav').classList.remove('active');
+                }
+            });
+        });
+
+        // Highlight active section in navigation
+        const sections = document.querySelectorAll('.module');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.style.fontWeight = '400';
+                if (item.getAttribute('href') === `#${current}`) {
+                    item.style.fontWeight = '700';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPG Module - Consulter Anleitungsheft</title>
+    <title>isales Module - Consulter Anleitungsheft</title>
     <style>
         * {
             margin: 0;
@@ -35,7 +35,7 @@
         .header {
             background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
             color: var(--white);
-            padding: 2rem 0;
+            padding: 1.5rem 0;
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
@@ -61,7 +61,9 @@
 
         .spg-logo {
             height: 50px;
-            filter: brightness(0) invert(1);
+            background: white;
+            padding: 5px 10px;
+            border-radius: 4px;
         }
 
         .header h1 {
@@ -76,7 +78,7 @@
             margin-top: 0.25rem;
         }
 
-        /* Navigation */
+        /* Mobile Menu Toggle Button */
         .nav-toggle {
             display: none;
             background: var(--white);
@@ -86,15 +88,23 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            gap: 0.5rem;
+            align-items: center;
+            box-shadow: var(--shadow);
         }
 
+        .nav-toggle:hover {
+            background: var(--light-green);
+        }
+
+        /* Navigation */
         .main-nav {
             background: var(--white);
             padding: 1.5rem 0;
             box-shadow: var(--shadow);
             position: sticky;
-            top: 100px;
+            top: 90px;
             z-index: 900;
         }
 
@@ -155,7 +165,7 @@
             margin-bottom: 2rem;
             box-shadow: var(--shadow);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            scroll-margin-top: 120px;
+            scroll-margin-top: 180px;
         }
 
         .module:hover {
@@ -309,57 +319,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.4rem;
-            }
-
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .logo-section {
-                flex-direction: column;
-            }
-
-            .nav-toggle {
-                display: block;
-            }
-
-            .main-nav {
-                display: none;
-                top: auto;
-                position: relative;
-            }
-
-            .main-nav.active {
-                display: block;
-            }
-
-            .nav-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .module {
-                padding: 1.5rem;
-            }
-
-            .module h2 {
-                font-size: 1.5rem;
-            }
-
-            .module-links {
-                flex-direction: column;
-            }
-
-            .link-btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
         /* Back to Top Button */
         .back-to-top {
             position: fixed;
@@ -379,6 +338,7 @@
             opacity: 0;
             pointer-events: none;
             transition: all 0.3s ease;
+            z-index: 999;
         }
 
         .back-to-top.visible {
@@ -390,6 +350,134 @@
             background: var(--dark-green);
             transform: translateY(-5px);
         }
+
+        /* Responsive - MOBILE */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem 0;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.75rem;
+            }
+
+            .logo-section {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .spg-logo {
+                height: 40px;
+            }
+
+            /* Mobile: Show hamburger button */
+            .nav-toggle {
+                display: flex;
+            }
+
+            /* Mobile: Hide navigation by default */
+            .main-nav {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 9999;
+                padding: 0;
+            }
+
+            .main-nav.active {
+                display: block;
+            }
+
+            .nav-content {
+                background: var(--white);
+                height: 100%;
+                overflow-y: auto;
+                padding: 2rem 1rem;
+                max-width: 100%;
+                position: relative;
+            }
+
+            /* Close button for mobile menu */
+            .nav-content::before {
+                content: "✕";
+                position: sticky;
+                top: 0;
+                right: 0;
+                background: var(--primary-green);
+                color: var(--white);
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                cursor: pointer;
+                margin-left: auto;
+                margin-bottom: 1rem;
+                box-shadow: var(--shadow);
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .nav-item {
+                padding: 1rem;
+                font-size: 1.1rem;
+            }
+
+            .module {
+                padding: 1.5rem;
+                scroll-margin-top: 80px;
+            }
+
+            .module h2 {
+                font-size: 1.4rem;
+            }
+
+            .module-icon {
+                font-size: 2rem;
+            }
+
+            .module-links {
+                flex-direction: column;
+            }
+
+            .link-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        /* Tablet adjustments */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .nav-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
@@ -397,33 +485,33 @@
     <header class="header">
         <div class="header-content">
             <div class="logo-section">
-                <img src="https://www.isales.de/wp-content/uploads/cropped-SPG.png" alt="SPG Logo" class="spg-logo">
+                <img src="data:image/webp;base64,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" alt="SPG Logo" class="spg-logo">
                 <div>
-                    <h1>SPG Module - Consulter Anleitungsheft</h1>
-                    <p>Strukturierter Leitfaden für die Kundenberatung</p>
+                    <h1>isales Module - Consulter Anleitungsheft</h1>
+                    <p>Anleitungsheft SPG-Module</p>
                 </div>
             </div>
-            <button class="nav-toggle" onclick="toggleNav()">📋 Inhaltsverzeichnis</button>
+            <button class="nav-toggle" onclick="toggleNav()">☰ Module</button>
         </div>
     </header>
 
     <!-- Navigation -->
     <nav class="main-nav" id="mainNav">
-        <div class="nav-content">
+        <div class="nav-content" onclick="closeNavIfClickOutside(event)">
             <div class="nav-grid">
-                <a href="#preishistorie" class="nav-item">Preishistorie</a>
-                <a href="#positionsvorschlag" class="nav-item">Positionsvorschlag</a>
-                <a href="#konsilager" class="nav-item">Konsilager</a>
-                <a href="#palettenkonto" class="nav-item">Palettenkonto</a>
-                <a href="#etikettenmodul" class="nav-item">Etikettenmodul</a>
-                <a href="#banf" class="nav-item">BAnf</a>
-                <a href="#eingangsrechnungspruefung" class="nav-item">Eingangsrechnungsprüfung</a>
-                <a href="#benachrichtigungsdienst" class="nav-item">Benachrichtigungsdienst</a>
-                <a href="#intercompany" class="nav-item">Intercompany Dienst</a>
-                <a href="#querytool" class="nav-item">Query Tool DX</a>
-                <a href="#easyconfigurator" class="nav-item">EasyConfigurator</a>
-                <a href="#importer" class="nav-item">Importer</a>
-                <a href="#mail2xrm" class="nav-item">Mail-2-xRM</a>
+                <a href="#preishistorie" class="nav-item" onclick="closeNav()">Preishistorie</a>
+                <a href="#positionsvorschlag" class="nav-item" onclick="closeNav()">Positionsvorschlag</a>
+                <a href="#konsilager" class="nav-item" onclick="closeNav()">Konsilager</a>
+                <a href="#palettenkonto" class="nav-item" onclick="closeNav()">Palettenkonto</a>
+                <a href="#etikettenmodul" class="nav-item" onclick="closeNav()">Etikettenmodul</a>
+                <a href="#banf" class="nav-item" onclick="closeNav()">BAnf</a>
+                <a href="#eingangsrechnungspruefung" class="nav-item" onclick="closeNav()">Eingangsrechnungsprüfung</a>
+                <a href="#benachrichtigungsdienst" class="nav-item" onclick="closeNav()">Benachrichtigungsdienst</a>
+                <a href="#intercompany" class="nav-item" onclick="closeNav()">Intercompany Dienst</a>
+                <a href="#querytool" class="nav-item" onclick="closeNav()">Query Tool DX</a>
+                <a href="#easyconfigurator" class="nav-item" onclick="closeNav()">EasyConfigurator</a>
+                <a href="#importer" class="nav-item" onclick="closeNav()">Importer</a>
+                <a href="#mail2xrm" class="nav-item" onclick="closeNav()">Mail-2-xRM</a>
             </div>
         </div>
     </nav>
@@ -909,6 +997,31 @@
             nav.classList.toggle('active');
         }
 
+        // Close Navigation
+        function closeNav() {
+            const nav = document.getElementById('mainNav');
+            nav.classList.remove('active');
+        }
+
+        // Close nav when clicking on the backdrop (only on mobile)
+        function closeNavIfClickOutside(event) {
+            if (window.innerWidth <= 768 && event.target === event.currentTarget) {
+                closeNav();
+            }
+        }
+
+        // Close nav when clicking the X button (::before pseudo-element)
+        document.querySelector('.nav-content').addEventListener('click', function(event) {
+            const rect = this.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            // Check if click is in the top-right area where the X button is
+            if (window.innerWidth <= 768 && x > rect.width - 60 && y < 60) {
+                closeNav();
+            }
+        });
+
         // Back to Top Button
         const backToTop = document.getElementById('backToTop');
         
@@ -928,36 +1041,29 @@
             });
         });
 
-        // Close mobile nav when clicking a link
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
-                    document.getElementById('mainNav').classList.remove('active');
-                }
-            });
-        });
-
-        // Highlight active section in navigation
+        // Highlight active section in navigation (only on desktop)
         const sections = document.querySelectorAll('.module');
         const navItems = document.querySelectorAll('.nav-item');
 
         window.addEventListener('scroll', () => {
-            let current = '';
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (window.pageYOffset >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
+            if (window.innerWidth > 768) {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= (sectionTop - 200)) {
+                        current = section.getAttribute('id');
+                    }
+                });
 
-            navItems.forEach(item => {
-                item.style.fontWeight = '400';
-                if (item.getAttribute('href') === `#${current}`) {
-                    item.style.fontWeight = '700';
-                }
-            });
+                navItems.forEach(item => {
+                    item.style.fontWeight = '400';
+                    if (item.getAttribute('href') === `#${current}`) {
+                        item.style.fontWeight = '700';
+                    }
+                });
+            }
         });
     </script>
 </body>
